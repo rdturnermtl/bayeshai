@@ -1,8 +1,12 @@
 - step:
     name: test
     image: juhavalohai/bayesmark
-    command: 
-      - bayesmark-launch {parameters} -dir /tmp -b 123 -v
+    command:
+      - bayesmark-launch {parameters} -dir /tmp -b 123 -dr /valohai/inputs/data -v  # TODO change -dr to where ever the csv files go
+      # TODO add another command here (after generating fixed baseline): cp /path/to/baseline.json /tmp/123/derived/baseline.json
+      - bayesmark-agg -dir /tmp -b 123
+      - bayesmark-anal -dir /tmp -b 123 -v
+      # TODO command to extract final score from /tmp/123/derived/summary.json and provide as output (then displayed on leaderboard)
     parameters:
       - name: studies
         type: integer
@@ -23,17 +27,17 @@
         type: string
         description: List of models
         pass-as: -c {v}
-        default: DT
+        default: DT  # TODO we can leave this as blank in the competition so that we iterate over all models
       - name: datasets
         type: string
         description: List of datasets
         pass-as: -d {v}
-        default: digits        
+        default: digits  # TODO put names of csv here, but cannot commit that to a public repo to avoid data-leakage
       - name: metrics
         type: string
         description: List of scoring metrics
         pass-as: -m {v}
-        default: acc
+        default: acc  # TODO we can leave this as blank in the competition so that we iterate over all metrics
     inputs:
       - name: optimizer
 
